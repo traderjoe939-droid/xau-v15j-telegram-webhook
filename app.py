@@ -5,7 +5,6 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# Store these in Render Environment Variables
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
@@ -161,8 +160,10 @@ def webhook():
 
         if event == "entry":
             message = format_entry_message(data)
+
         elif event in ["tp1_hit", "tp2_hit", "tp3_hit", "tp35_hit", "sl_hit", "time_exit"]:
             message = format_level_message(data)
+
         else:
             return jsonify({
                 "ok": False,
@@ -186,4 +187,5 @@ def webhook():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    port = int(os.getenv("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
